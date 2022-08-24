@@ -17,7 +17,7 @@
       @keydown.up="(e) => keydownEvent(e, 'up')"
       @keydown="e => checkNeedInit(e)"
       :value="searchValue"
-      :placeholder="placeholder || 'Hi, Rubick2'"
+      :placeholder="placeholder || 'Hi, 再难也要坚持'"
       @keypress.enter="(e) => keydownEvent(e, 'enter')"
       @keypress.space="(e) => keydownEvent(e, 'space')"
       @focus="emit('focus')"

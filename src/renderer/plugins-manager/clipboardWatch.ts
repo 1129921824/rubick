@@ -35,7 +35,7 @@ export default ({
           },
         },
       ];
-      // 判断复制的文件类型是否一直
+      // 判断复制的文件类型是否一致
       const commonLen = fileList.filter(
         (file) => path.extname(fileList[0].path) === path.extname(file.path)
       ).length;
