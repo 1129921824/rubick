@@ -1,5 +1,6 @@
 module.exports = {
   title: 'Rubick',
+  port: 8099,
   description: '你的开源桌面插件应用',
   base: '/rubick/',
   themeConfig: {

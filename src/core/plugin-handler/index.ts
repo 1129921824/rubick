@@ -9,6 +9,7 @@ import fixPath from "fix-path";
 
 import spawn from "cross-spawn";
 import { ipcRenderer } from "electron";
+import { commandType } from "./../enums/commandType";
 
 fixPath();
 
@@ -84,7 +85,7 @@ class AdapterHandler {
 
   // 安装并启动插件
   async install(adapters: Array<string>, options: { isDev: boolean }) {
-    const installCmd = options.isDev ? "link" : "install";
+    const installCmd = options.isDev ? commandType.Link : commandType.Install;
     // 安装
     await this.execCommand(installCmd, adapters);
   }
@@ -95,7 +96,7 @@ class AdapterHandler {
    * @memberof AdapterHandler
    */
   async update(...adapters: string[]) {
-    await this.execCommand("update", adapters);
+    await this.execCommand(commandType.Update, adapters);
   }
 
   /**
@@ -105,7 +106,9 @@ class AdapterHandler {
    * @memberof AdapterHandler
    */
   async uninstall(adapters: string[], options: { isDev: boolean }) {
-    const installCmd = options.isDev ? "unlink" : "uninstall";
+    const installCmd = options.isDev
+      ? commandType.UnLink
+      : commandType.UnInstall;
     // 卸载插件
     await this.execCommand(installCmd, adapters);
   }
