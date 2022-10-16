@@ -30,6 +30,8 @@ export default () => {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
       // Load the url of the dev server if in development mode
       win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+      // 打开主窗口进程开发工具
+      win.webContents.openDevTools();
     } else {
       createProtocol("app");
       // Load the index.html when not in development

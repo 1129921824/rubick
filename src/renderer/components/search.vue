@@ -1,23 +1,27 @@
 <template>
   <div class="rubick-select">
-    <div class="select-tag" v-show="currentPlugin.cmd">{{ currentPlugin.cmd }}</div>
+    <div class="select-tag" v-show="currentPlugin.cmd">
+      {{ currentPlugin.cmd }}
+    </div>
     <div
       :class="clipboardFile[0].name ? 'clipboard-tag' : 'clipboard-img'"
       v-if="!!clipboardFile.length"
     >
       <img :src="getIcon()" />
       <div class="ellipse">{{ clipboardFile[0].name }}</div>
-      <a-tag color="#aaa" v-if="clipboardFile.length > 1">{{ clipboardFile.length }}</a-tag>
+      <a-tag color="#aaa" v-if="clipboardFile.length > 1">{{
+        clipboardFile.length
+      }}</a-tag>
     </div>
     <a-input
       id="search"
       class="main-input"
-      @input="(e) => changeValue(e)"
-      @keydown.down="(e) => keydownEvent(e, 'down')"
-      @keydown.up="(e) => keydownEvent(e, 'up')"
-      @keydown="e => checkNeedInit(e)"
+      :placeholder="placeholder || 'Hi, MyTools'"
       :value="searchValue"
-      :placeholder="placeholder || 'Hi, 再难也要坚持'"
+      @input="(e) => changeValue(e)"
+      @keydown="(e) => checkNeedInit(e)"
+      @keydown.up.prevent="(e) => keydownEvent(e, 'up')"
+      @keydown.down.prevent="(e) => keydownEvent(e, 'down')"
       @keypress.enter="(e) => keydownEvent(e, 'enter')"
       @keypress.space="(e) => keydownEvent(e, 'space')"
       @focus="emit('focus')"
@@ -25,7 +29,10 @@
       <template #suffix>
         <div class="suffix-tool">
           <MoreOutlined @click="showSeparate()" class="icon-more" />
-          <div v-if="currentPlugin && currentPlugin.logo" style="position: relative">
+          <div
+            v-if="currentPlugin && currentPlugin.logo"
+            style="position: relative"
+          >
             <a-spin v-show="pluginLoading" class="loading">
               <template #indicator>
                 <LoadingOutlined style="font-size: 42px" />
@@ -63,7 +70,10 @@ const props: any = defineProps({
   },
   currentPlugin: {},
   pluginLoading: Boolean,
-  clipboardFile: (() => [])(),
+  clipboardFile: {
+    type: Array,
+    default: (() => [])(),
+  },
 });
 
 const changeValue = (e) => {
@@ -80,9 +90,11 @@ const emit = defineEmits([
   "choosePlugin",
   "focus",
   "readClipboardContent",
+  "clearClipbord",
 ]);
 
 const keydownEvent = (e, key: string) => {
+  console.log(e, key);
   const { ctrlKey, shiftKey, altKey, metaKey } = e;
   const modifiers: Array<string> = [];
   ctrlKey && modifiers.push("control");
@@ -96,7 +108,7 @@ const keydownEvent = (e, key: string) => {
       modifiers,
     },
   });
-  const runPluginDisable = e.target.value === "" || props.currentPlugin.name
+  const runPluginDisable = e.target.value === "" || props.currentPlugin.name;
   switch (key) {
     case "up":
       emit("changeCurrent", -1);
@@ -116,10 +128,10 @@ const keydownEvent = (e, key: string) => {
       break;
   }
 };
-
+// 是否需要初始化
 const checkNeedInit = (e) => {
   const { ctrlKey, metaKey } = e;
-
+  // 如果未输入且输出了退格键，则关闭tag
   if (e.target.value === "" && e.keyCode === 8) {
     closeTag();
   }
@@ -137,7 +149,7 @@ const targetSearch = ({ value }) => {
     });
   }
 };
-
+// 关闭tag标签
 const closeTag = () => {
   emit("changeSelect", {});
   emit("clearClipbord");
@@ -192,7 +204,9 @@ const changeHideOnBlur = () => {
 
 const getIcon = () => {
   if (props.clipboardFile[0].dataUrl) return props.clipboardFile[0].dataUrl;
-  return props.clipboardFile[0].isFile ? require("../assets/file.png") : require("../assets/folder.png")
+  return props.clipboardFile[0].isFile
+    ? require("../assets/file.png")
+    : require("../assets/folder.png");
 };
 
 const newWindow = () => {
