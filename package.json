@@ -1,7 +1,7 @@
 {
   "name": "rubick",
-  "version": "2.0.4-beta.3",
-  "author": "muwoo <2424880409@qq.com>",
+  "version": "2.0.4-beta.4",
+  "author": "再难也要坚持 <1129921824@qq.com>",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
